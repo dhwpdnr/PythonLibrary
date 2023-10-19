@@ -159,4 +159,41 @@ print(f"a.argmax() : {a.argmax()}")
 # 모든 요소의 누적합
 print(f"a.cumsum() : {a.cumsum()}")
 
+print("axis 값을 통해 축을 기준으로 연산이 가능하다")
+# axis=0은 shape에서 첫번째부터 순서대로 해당
+b = np.arange(12).reshape(3, 4)
+print(f"b : {b}")
+
+print(f"b.sum(axis=0) : {b.sum(axis=0)}")
+
+print(f"b.sum(axis=1) : {b.sum(axis=1)}")
+print()
+
+print("범용 함수")
+B = np.arange(3)
+print(f"B : {B}")
+
+# y = e^x
+print(f"np.exp(B) : {np.exp(B)}")
+
+# y = sqrt(x)
+print(f"np.sqrt(B) : {np.sqrt(B)}")
+print()
+
+print("인덱싱, 슬라이싱, 반복")
+a = np.arange(10) ** 3
+print(f"a : {a}")
+
+print(f"a[2] : {a[2]}")
+
+print(f"a[2:5] : {a[2:5]}")
+
+a[:6:2] = 1000
+print(f"a[:6:2] = 1000 => a = {a}")
+
+# reverse
+a[::-1]
+for i in a:
+    print(i ** (1 / 3.))
+
 # np.eye(), np.diag(), np.vander(), np.indices()
