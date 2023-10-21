@@ -196,4 +196,43 @@ a[::-1]
 for i in a:
     print(i ** (1 / 3.))
 
+print("np.fromfunction()")
+
+
+def f(x, y):
+    return 10 * x + y
+
+
+b = np.fromfunction(f, (5, 4), dtype=int)
+print(f"b : {b}")
+print(f"b[2, 3] : {b[2, 3]}")
+
+print(f"b[0:5, 1] : {b[0:5, 1]}")
+
+print(f"b[:, 1] : {b[:, 1]}")
+
+print(f"b[1:3, :] : {b[1:3, :]}")
+
+print(f"b[-1] : {b[-1]}")
+print()
+
+c = np.array([[[0, 1, 2],
+               [10, 12, 13]],
+              [[100, 101, 102],
+               [110, 112, 113]]])
+print(f"c : {c}")
+print(f"c.shape : {c.shape}")
+print(f"c[1, ...] : {c[1, ...]}")  # same as c[1,:,:] or c[1]
+
+print(f"c[..., 2] : {c[..., 2]}")  # same as c[:,:,2]
+print()
+
+print("for row in b:")
+for row in b:
+    print(row)
+
+print("for element in b.flat:")
+for element in b.flat:
+    print(element)
+
 # np.eye(), np.diag(), np.vander(), np.indices()
