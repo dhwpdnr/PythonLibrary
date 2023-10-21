@@ -1,4 +1,5 @@
 import numpy as np
+import numpy.random as npr
 
 # Numpy 는 Python에서 벡터, 행렬 등 수치 연산을 수행하는 선형대수(Linear algebra) 라이브러리
 
@@ -234,5 +235,60 @@ for row in b:
 print("for element in b.flat:")
 for element in b.flat:
     print(element)
+
+print("Shape 변경")
+# .ravel()은 1차원으로
+# .reshape()는 지정한 차원으로
+# .T는 전치(Transpose) 변환을 할 수 있다
+# 데이터 원본은 변경시키지 않고 복사하여 연산한 결과가 return
+a = np.floor(10 * npr.random((3, 4)))
+print(f"a : {a}")
+print(f"a.shape : {a.shape}")
+print(f"a.ravel() : {a.ravel()}")
+
+# [3,4] => [2,6]로 변경
+print(f"a.reshape(2, 6) : {a.reshape(2, 6)}")
+
+# [3,4]의 전치(transpose)변환으로 [4,3]
+print(f"a.T : {a.T}")
+print(f"a.T.shape : {a.T.shape}")
+print(f"a.shape : {a.shape}")
+print()
+
+print("resize")
+print(f"a : {a}")
+
+a.resize((2, 6))
+print("a.resize((2, 6))")
+print(f"a : {a}")
+print(f"a.reshape(3, -1) : {a.reshape(3, -1)}")
+
+print("데이터 쌓기")
+# np.vstack(): axis=0 기준으로 쌓음
+# np.hstack(): axis=1 기준으로 쌓음
+a = np.floor(10 * npr.random((2, 2)))
+print(f"a: {a}")
+
+b = np.floor(10 * npr.random((2, 2)))
+print(f"b : {b}")
+
+# [2,2] => [4,2]
+print(f"np.vstack((a, b)) : {np.vstack((a, b))}")
+
+# [2,2] => [2,4]
+print(f"np.hstack((a, b)) : {np.hstack((a, b))}")
+print()
+
+print("데이터 쪼개기")
+# np.hsplit()을 통해 숫자1개가 들어갈 경우 X개로 등분
+# 리스트로 넣을 경우 axis=1 기준 인덱스로 데이터를 분할
+a = np.floor(10 * npr.random((2, 12)))
+print(f"a : {a}")
+
+# [2,12] => [2,4] 데이터 3개로 등분
+print(f"np.hsplit(a, 3) : {np.hsplit(a, 3)}")
+
+# [2,12] => [:, :3], [:, 3:4], [:, 4:]로 분할
+print(f"np.hsplit(a, (3, 4)) : {np.hsplit(a, (3, 4))}")
 
 # np.eye(), np.diag(), np.vander(), np.indices()
