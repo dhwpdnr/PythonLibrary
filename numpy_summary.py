@@ -339,4 +339,26 @@ E2 = np.eye(3, k=1, dtype=int)
 print(E2)
 E3 = np.eye(3, k=-1, dtype=int)
 print(E3)
-# np.eye(), np.diag(), np.vander(), np.indices()
+
+b = np.array(([[1, 1], [2, 2], [3, 3]]))
+np.insert(b, 1, [1, 2, 3], axis=1)
+print(f"b : {b}")
+
+# flatten
+b = np.array([[1, 1], [2, 2], [3, 3]])
+b.flatten()
+print(f"b.flatten() : {b.flatten()}")
+
+a = np.array([1, 2, 3])
+b = np.array([[4, 5, 6], [7, 8, 9]])
+print(np.append(a, b))
+print(np.append([a], b, axis=0))
+
+rnd = npr.randn(5) * 10 + 165
+print(rnd)
+print(rnd.round(2))
+
+np_array = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]])
+print(np_array % 2 == 0)
+print(np_array[np_array % 2 == 0])
+# np.diag(), np.vander(), np.indices()
