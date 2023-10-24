@@ -329,5 +329,14 @@ print(d is a)
 d[0, 0] = 9999
 print(a)
 
+# 2차원 정방단위행렬 생성
+D = np.identity(3)
+print(D)
 
+E1 = np.eye(3, dtype=int)
+print(E1)
+E2 = np.eye(3, k=1, dtype=int)
+print(E2)
+E3 = np.eye(3, k=-1, dtype=int)
+print(E3)
 # np.eye(), np.diag(), np.vander(), np.indices()
