@@ -1,13 +1,21 @@
 from multiprocessing import Process
+import os
 
 
-class HelloProcess(Process):
-    def __init__(self):
-        super(Process, self).__init__()
+def info(title):
+    print(title)
+    print('module name:', __name__)
+    print('parent process:', os.getppid())
+    print('process id:', os.getpid())
 
-    def run(self):
-        print("Hello process")
+
+def f(name):
+    info('function f')
+    print('hello', name)
 
 
-p1 = HelloProcess()
-p1.start()
+if __name__ == '__main__':
+    info('main line')
+    p = Process(target=f, args=('bob',))
+    p.start()
+    p.join()
