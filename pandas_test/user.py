@@ -17,8 +17,9 @@ for item in df.itertuples():
         user_payload = {
             "name": item[1],
             "phone_number": phone_number,
+            "id": item[2]
         }
         user_data.append(user_payload)
         phone_numbers.add(phone_number)
 
-print(len(user_data))
+print(user_data)
