@@ -7,11 +7,16 @@ def test_add():
     assert result == 5
 
 
+def test_add_strings():
+    result = my_functions.add("i like ", "burger")
+    assert result == "i like burger"
+
+
 def test_divide():
     result = my_functions.divide(10, 5)
     assert result == 2
 
 
 def test_divide_by_zero():
-    with pytest.raises(ZeroDivisionError):
-        result = my_functions.divide(10, 0)
+    with pytest.raises(ValueError):
+        my_functions.divide(10, 0)
