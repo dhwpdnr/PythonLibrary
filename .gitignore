@@ -324,3 +324,5 @@ pyrightconfig.json
 *.png
 user.csv
 .pre-commit-config.yaml
+
+*/data
