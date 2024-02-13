@@ -1,36 +1,22 @@
-from netCDF4 import Dataset
-import geopandas as gpd
-import pandas as pd
+import json
 
-# 파일 경로
-ncfile_path = "./data/MKPRISM_MKPRISMv21_skorea_TAMAX_gridraw_daily_2000.nc"
-csv_file_path = "./data/region_code.csv"
+# GeoJSON 파일 로드
+file_path = "./data/HangJeongDong_ver20230701.geojson"
+with open(file_path, "r", encoding="utf-8") as f:
+    geojson_data = json.load(f)
 
-# CSV 파일 읽기
-df_csv = pd.read_csv(csv_file_path)
+filtered_features = [
+    feature
+    for feature in geojson_data["features"]
+    if feature["properties"]["sido"] == "30"
+]
 
-# .nc 파일 열기
-ncfile = Dataset(ncfile_path)
+# 필터링된 데이터로 새로운 GeoJSON 객체 생성
+filtered_geojson = {"type": "FeatureCollection", "features": filtered_features}
 
-ncfile.close()
+# 결과 확인 (필터링된 항목 수 출력)
+len(filtered_features), filtered_geojson.keys()
 
-# .shp 파일 경로
-shp_file_path = "./data/emd.shp"
-
-# 파일 읽기
-gdf = gpd.read_file(shp_file_path, encoding="euc-kr")
-
-# 데이터 확인
-print(gdf.head())
-
-# '법정동코드' 열을 문자열로 변환
-df_csv["법정동코드"] = df_csv["법정동코드"].astype(str)
-
-# 이제 '법정동코드' 열의 뒤 두 자리를 제거할 수 있음
-df_csv["법정동코드_수정"] = df_csv["법정동코드"].str[:-2]
-
-# 다시 필터링 시도
-filtered_gdf = gdf[gdf["EMD_CD"].isin(df_csv["법정동코드_수정"])]
-
-# 데이터 확인
-print(filtered_gdf.head())
+filtered_geojson_file_path = "./data/Daejeon.geojson"
+with open(filtered_geojson_file_path, "w", encoding="utf-8") as f:
+    json.dump(filtered_geojson, f, ensure_ascii=False, indent=4)
