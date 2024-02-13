@@ -326,3 +326,5 @@ user.csv
 .pre-commit-config.yaml
 
 */data
+
+*/processed_data
