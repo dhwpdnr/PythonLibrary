@@ -328,3 +328,5 @@ user.csv
 */data
 
 */processed_data
+
+*.json
