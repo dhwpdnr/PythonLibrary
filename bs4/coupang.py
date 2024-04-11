@@ -1,42 +1,36 @@
 import requests
 import json
 from pprint import pprint
+from urllib.parse import urlparse, parse_qs
 
-url = "https://m.coupang.com/vm/sdp/v3/mweb/products/6974393264/option-tree-list?itemId=17019560507&vendorItemId=86451248472&expandType=143296"
+base_url = "https://www.coupang.com"
+url = "https://www.coupang.com/vp/products/6974393264?itemId=17019560507&searchId=be4ffe0af2324a92a3e3bfaf9ec050d6&sourceType=brandstore_sdp_atf-baseline_list&storeId=143296&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A01026686&vendorItemId=86451248472&isAddedCart="
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
     "Accept-Language": "ko-KR,ko;q=0.8,en-US;q=0.5,en;q=0.3",
 }
-res = requests.get(url, headers=headers)
 
-if res.status_code == 200:
-    data = json.loads(res.text)
-    option_list = data["rData"]["pageList"][0]["widgetList"][0]["data"]["values"]
-    type_id = data["rData"]["pageList"][0]["widgetList"][0]["data"]["typeId"]
-    option_values = data["rData"]["pageList"][0]["widgetList"][0]["data"]["values"]
+parsed_url = urlparse(url)
+path_segments = parsed_url.path.split("/")
+product_id = path_segments[-1]  # 경로의 마지막 부분이 상품 ID입니다.
 
-    for option in option_values:
-        print(f"Item ID: {option['itemId']}")
-        print(f"Vendor Item ID: {option['vendorItemId']}")
-        print(f"Value Name: {option['valueName']}")
-        print(f"Image URL: {option['image']}")
-        if "selected" in option:
-            print(f"Selected: {option['selected']}")
-        print(f"Action URL: {option['action']['event']['url']}\n")
-        # item_id = option["itemId"]
-        # option_name = option["valueName"]
-        # image_url = option["image"]
-        # vendor_item_id = option["vendorItemId"]
-        # pprint(option)
-        # res = requests.get(
-        #     f'https://m.coupang.com/vm/sdp/v3/mweb/products/6974393264/option-tree-list?itemId={item_id}&vendorItemId={vendor_item_id}&expandType={type_id}',
-        #     headers=headers)
-        # print(res.status_code)
-        # data = json.loads(res.text)
-        # sub_list = data["rData"]["pageList"][0]["widgetList"][0]["data"]["values"]
-        # for sub in sub_list:
-        #     print(f"아이디 : {sub['itemId']}")
-        #     print(f"옵션명 : {sub['itemTitle']}")
-        #     print(f"이미지 : {sub['image']}")
-        #     print()
-        print("__________________________")
+# 요청할 URL 구성
+url = f"https://www.coupang.com/vm/v4/enhanced-pdp/products/{product_id}"
+
+# GET 요청 실행
+response = requests.get(url, headers=headers)
+data = json.loads(response.text)
+first_options = data["rData"]["product"]["entityList"][2]["entity"]["options"]
+
+print(f"상품명 : {data['rData']['product']['productDto']['name']}")
+print("__________________________________")
+
+for option in first_options:
+    # print(option["name"])
+    # print(option["requestUri"])
+    response = requests.get(base_url + option["requestUri"], headers=headers)
+    option_data = json.loads(response.text)["rData"]["options"]
+    for opt in option_data:
+        print(f"옵션명 : {option['name']}, {opt['name']}")
+        print(f'가격 {opt["i18nSalesPrice"]["amount"]}원')
+        print()
