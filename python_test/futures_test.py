@@ -15,9 +15,15 @@
 # 멀티 프로세싱 사용, CPython
 
 
+# 사용법 1 (map)
 import os
 import time
-from concurrent import futures
+from concurrent.futures import (
+    ThreadPoolExecutor,
+    ProcessPoolExecutor,
+    wait,
+    as_completed,
+)
 
 WORK_LIST = [100000, 1000000, 10000000, 100000000]
 
@@ -37,7 +43,7 @@ def main():
 
     # 결과 건수
     # ProcessPoolExecutor
-    with futures.ThreadPoolExecutor() as excutor:
+    with ThreadPoolExecutor() as excutor:
         # map -> 작업 순서 유지, 즉시 실행
         result = excutor.map(sum_generator, WORK_LIST)
 
@@ -50,5 +56,62 @@ def main():
     print(msg.format(list(result), end_tm))
 
 
+# if __name__ == "__main__":
+#     main()
+
+
+# 사용법 2 (wait, as_completed)
+def main2():
+    # Worker Count
+    worker = min(10, len(WORK_LIST))
+
+    # 시작 시간
+    start_tm = time.time()
+
+    # futures list
+    futures_list = []
+
+    # ProcessPoolExecutor
+    with ThreadPoolExecutor() as excutor:
+        for work in WORK_LIST:
+            # future 반환(아직 실행되지 않음)
+            future = excutor.submit(sum_generator, work)
+            # 스케쥴링
+            futures_list.append(future)
+            # 스케쥴링 확인
+            print("Scheduled for {} : {}".format(work, future))
+            print()
+
+        # wait 결과 출력
+        # result = wait(futures_list, timeout=2)
+        #
+        # # 성공
+        # print("Completed Tasks : ", str(result.done))
+        #
+        # # 실패
+        # print("Pending ones before wait: ", str(result.not_done))
+        #
+        # # 결과 값 출력
+        # print("Result", [future.result() for future in result.done])
+
+        # as_completed 결과 출력
+        for future in as_completed(futures_list):
+            result = future.result()
+            done = future.done()
+            cancelled = future.cancelled
+
+            # future 결과 확인
+            print("Future Result : {}, Done : {}".format(result, done))
+            print("Future Cancelled : {}".format(cancelled))
+
+    # 종료 시간
+    end_tm = time.time() - start_tm
+
+    # 출력 포맷
+    msg = "\n Time: {:.2f}s"
+
+    print(msg.format(end_tm))
+
+
 if __name__ == "__main__":
-    main()
+    main2()
