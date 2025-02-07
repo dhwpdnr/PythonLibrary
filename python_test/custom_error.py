@@ -1,6 +1,3 @@
-import os
-
-
 class NegativeValueError(ValueError):
     """Custom exception for negative values."""
 
